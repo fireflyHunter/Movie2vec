@@ -9,9 +9,11 @@ def process_ratings(ratings,output):
         row = str(line).strip().split('::')
         whole.append(row)
     writer = csv.writer(open(output, 'w'))
-    writer.writerow(["movieId", "rating", "userId", "timestamp"])
+    # writer.writerow(["movieId", "rating", "userId", "timestamp"])
+    writer.writerow(["userId", "movieId", "rating", "timestamp"])
+
     for row in whole:
-        writer.writerow([row[1], row[2], row[0], row[3]])
+        writer.writerow(row)
 
 def write_movie_sents(filename,output):
     """
@@ -49,10 +51,10 @@ def write_movie_sents(filename,output):
             if (i%10000) == 0:
                 print ("{} lines of data loaded".format(i))
             line = line.split(",")
-            userId = int(line[2])
+            userId = int(line[0])
             timeStamp = int(line[3])
-            movieId = int(line[0])
-            rating = line[1]
+            movieId = int(line[1])
+            rating = line[2]
             data = (movieId, timeStamp, rating)
             if userId in huge.keys():
                 huge[userId].append(data)
@@ -78,16 +80,19 @@ def write_movie_sents(filename,output):
     print('Writting finish!')
 
 def main():
-    if len(sys.argv) != 4:
-        print("Please verify your parameters")
-        sys.exit(1)
-    raw_ratings_file = sys.argv[1]
-    ratings_data = sys.argv[2]
-    movie_sents = sys.argv[3]
+    if len(sys.argv) == 4:
+        #10m
+        raw_ratings_file = sys.argv[1]
+        ratings_data = sys.argv[2]
+        movie_sents = sys.argv[3]
 
-    process_ratings(raw_ratings_file,ratings_data)
-    write_movie_sents(ratings_data,movie_sents)
-
+        process_ratings(raw_ratings_file,ratings_data)
+        write_movie_sents(ratings_data,movie_sents)
+    if len(sys.argv) == 3:
+        #20m
+        ratings_data = sys.argv[1]
+        movie_sents = sys.argv[2]
+        write_movie_sents(ratings_data,movie_sents)
     return 0
 
 if __name__ == "__main__":
