@@ -66,6 +66,7 @@ def write_movie_sents(filename,output,stoplist):
     resTrain.close()
     print('Writting finish!')
 
+
 def main():
     if len(sys.argv) == 4:
         #10m
@@ -74,15 +75,13 @@ def main():
         movie_sents = sys.argv[3]
 
         process_ratings(raw_ratings_file,ratings_data)
-        write_movie_sents(ratings_data,movie_sents)
+        write_movie_sents(ratings_data,movie_sents,m10_low_count_words)
     if len(sys.argv) == 3:
         #20m
         ratings_data = sys.argv[1]
         movie_sents = sys.argv[2]
-        write_movie_sents(ratings_data,movie_sents)
+        write_movie_sents(ratings_data,movie_sents,m20_low_count_words)
     return 0
 
 if __name__ == "__main__":
-    # sys.exit(main())
-    
-    write_movie_sents("./ml-20m/ml-20m/ratings.csv","ml-20m/ml-20m/movie_sents_low_count_removed.txt",stoplist=m20_low_count_words)
+    sys.exit(main())
